@@ -6,17 +6,17 @@ var connection = mysql.createConnection({
     host:'db',
     user: 'root',
     password: 'test',
-    database: 'mydb'
+    database: 'sys'
 })
 
 connection.connect(function(err) {
   if (err) throw err;
   console.log("db connected!");
   
-  connection.query("CREATE DATABASE IF NOT EXISTS mydb", function (err, result) {
+  /* connection.query("CREATE DATABASE IF NOT EXISTS sys", function (err, result) {
     if (err) throw err;
     console.log("Database created");
-  });
+  }); */
 
   const queryString = 'CREATE TABLE IF NOT EXISTS users ( username varchar(50) )'
   connection.query(queryString, function (err, result) {

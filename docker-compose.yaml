@@ -2,18 +2,45 @@ version: '3.1'
 
 services:
   db:
-    image: mysql
+    image: mysql:latest
+    command: --innodb-use-native-aio=0
     container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: test
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=testdb
     ports:
       - 3306:3306
+    networks:
+      - node-network
     
   node:
     container_name: node
+    restart:
+      always
     build: .
     ports:
       - 8080:3000
     depends_on:
       - db
+    networks:
+      - node-network
+
+  nginx:
+    restart:
+      always
+    container_name: nginx
+    depends_on:
+      - node
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 7070:80
+    networks:
+      - node-network
+
+
+networks:
+  node-network:
+    driver: bridge
