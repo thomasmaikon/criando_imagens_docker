@@ -19,7 +19,7 @@ services:
       - db
     networks:
       - node-network
-    command: sh -c './wait-for-it.sh -t 0 db:3306 -- node index.js'
+    command: sh -c "npm i && ./wait-for-it.sh -t 0 db:3306 -- node index.js"
 
   nginx:
     restart:
