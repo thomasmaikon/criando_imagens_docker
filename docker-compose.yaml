@@ -4,7 +4,6 @@ services:
   db:
     image: mysql:latest
     command: --innodb-use-native-aio=0
-    container_name: mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=test
@@ -13,14 +12,14 @@ services:
       - node-network
     
   node:
-    container_name: node
-    restart:
-      always
     build: .
+    volumes:
+      - ${PWD}:/app
     depends_on:
       - db
     networks:
       - node-network
+    command: sh -c './wait-for-it.sh -t 0 db:3306 -- node index.js'
 
   nginx:
     restart:
